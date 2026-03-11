@@ -1,0 +1,119 @@
+import random
+
+
+def main():
+    wins = 0
+    losses = 0
+    choice = ""
+
+    print("Welcome to Flower!")
+
+    while choice != "3":
+        print("\n1. Play")
+        print("2. Scoreboard")
+        print("3. Quit")
+        choice = input("Choice: ")
+
+        if valid_menu_choice(choice):
+            wins, losses = route(choice, wins, losses)
+        else:
+            print("Invalid choice.")
+
+
+main()
+
+
+def get_word_list():
+    file = open("words.txt", "r")
+    words = []
+    for line in file:
+        words.append(line.strip())
+    file.close()
+    return words
+
+
+def get_random_word():
+    words = get_word_list()
+    return random.choice(words)
+
+
+def valid_menu_choice(choice):
+    if choice == "1" or choice == "2" or choice == "3":
+        return True
+    return False
+
+
+def check_choice(letter, guessed):
+    if len(letter) != 1 or not letter.isalpha():
+        return False
+    if letter in guessed:
+        return False
+    return True
+
+
+def letter_in_word(letter, word):
+    if letter in word:
+        return True
+    return False
+
+
+def keep_going(wrong, word, guessed):
+    if wrong >= 7:
+        return False
+    for l in word:
+        if l not in guessed:
+            return True
+    return False
+
+
+def play(wins, losses):
+    word = get_random_word()
+    guessed = []
+    wrong = 0
+
+    print("\n--- FLOWER ---")
+
+    while keep_going(wrong, word, guessed):
+        display = ""
+        for l in word:
+            if l in guessed:
+                display = display + l + " "
+            else:
+                display = display + "_ "
+        print(display)
+        print("Petals left: " + str(7 - wrong))
+
+        letter = input("Guess a letter: ").lower()
+
+        if check_choice(letter, guessed) == False:
+            print("Invalid guess. Try again.")
+            continue
+
+        guessed.append(letter)
+
+        if letter_in_word(letter, word):
+            print("Correct!")
+        else:
+            wrong = wrong + 1
+            print("Wrong!")
+
+    if wrong >= 7:
+        print("You lost! The word was: " + word)
+        losses = losses + 1
+    else:
+        print("You win! The word was: " + word)
+        wins = wins + 1
+
+    return wins, losses
+
+
+def route(choice, wins, losses):
+    if choice == "1":
+        wins, losses = play(wins, losses)
+    elif choice == "2":
+        print("Wins: " + str(wins))
+        print("Losses: " + str(losses))
+    return wins, losses
+
+
+
