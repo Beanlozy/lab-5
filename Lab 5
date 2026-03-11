@@ -22,6 +22,14 @@ def main():
 
 main()
 
+def route(choice, wins, losses):
+    if choice == "1":
+        wins, losses = play(wins, losses)
+    elif choice == "2":
+        print("Wins: " + str(wins))
+        print("Losses: " + str(losses))
+    return wins, losses
+
 
 def get_word_list():
     file = open("words.txt", "r")
@@ -107,13 +115,7 @@ def play(wins, losses):
     return wins, losses
 
 
-def route(choice, wins, losses):
-    if choice == "1":
-        wins, losses = play(wins, losses)
-    elif choice == "2":
-        print("Wins: " + str(wins))
-        print("Losses: " + str(losses))
-    return wins, losses
+
 
 
 
